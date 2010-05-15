@@ -1,0 +1,101 @@
+; Colors
+; http://www.cs.cmu.edu/~maverick/GNUEmacsColorThemeTest/
+(require 'color-theme)
+(load-file "~/.emacs.d/themes/color-theme-lss.el")
+(color-theme-lss)
+
+; Re-read a buffer from disk
+(global-set-key (kbd "<f5>") 'revert-buffer)
+
+; Search tags
+(global-set-key [(control tab)] 'find-tag)
+
+; Indent with spaces
+(setq-default indent-tabs-mode nil)
+
+; Set current tabs to 2
+(setq default-tab-width 2)
+
+; Syntax highlight please
+(global-font-lock-mode t)
+
+; Spel check comments
+(setq-default flyspell-prog-mode t)
+
+; Magic Function to chmod +x anyfile that starts with a hashbang
+; http://rubygarden.org/ruby?InstallingEmacsExtensions
+(add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
+
+; No scroll please
+(scroll-bar-mode -1)
+
+;; Always wordwrap
+(setq truncate-partial-width-windows nil)
+(setq word-wrap t)
+
+; no autofills please
+(setq auto-fill-mode 0)
+
+; Always highlight the current line
+(global-hl-line-mode 1)
+
+; format the title-bar to always include the buffer name
+(setq frame-title-format (list "" "emacs" ": %f" ))
+
+(setq auto-mode-alist (cons '("\\.mdwn$" . markdown-mode) auto-mode-alist))
+(setq auto-mode-alist (cons '("\\.page$" . markdown-mode) auto-mode-alist))
+(setq auto-mode-alist (cons '("\\.eml$" . markdown-mode) auto-mode-alist))
+(setq auto-mode-alist (cons '("\\.md$" . markdown-mode) auto-mode-alist))
+(setq auto-mode-alist (cons '("\\.markdown$" . markdown-mode) auto-mode-alist))
+
+(setq auto-mode-alist (cons '("\\.thor$" . ruby-mode) auto-mode-alist))
+
+;; Tab completion
+;; http://www.emacsblog.org/2007/03/12/tab-completion-everywhere/
+(global-set-key [(tab)] 'smart-tab)
+(defun smart-tab ()
+  "This smart tab is minibuffer compliant: it acts as usual in
+    the minibuffer. Else, if mark is active, indents region. Else if
+    point is at the end of a symbol, expands it. Else indents the
+    current line."
+  (interactive)
+  (if (minibufferp)
+      (unless (minibuffer-complete)
+        (dabbrev-expand nil))
+    (if mark-active
+        (indent-region (region-beginning)
+                       (region-end))
+      (if (looking-at "\\_>")
+          (dabbrev-expand nil)
+        (indent-for-tab-command)))))
+
+
+;; rhtml-mode (because MuMaMo-mode locks up every other day on large
+;; buffers)
+(add-to-list 'load-path (concat dotfiles-dir "/elpa-to-submit/rhtml"))
+     (require 'rhtml-mode)
+     (add-hook 'rhtml-mode-hook
+     	  (lambda () (rinari-launch)))
+
+(add-to-list 'auto-mode-alist '("\\.liquid$" . rhtml-mode))
+(add-to-list 'auto-mode-alist '("\\.html\\.erb\\'" . rhtml-mode))
+(add-to-list 'auto-mode-alist '("\\.rhtml" . rhtml-mode))
+
+(autoload 'todo-list-mode "todo-list-mode") ;load when needed
+ 
+(setq auto-mode-alist (cons '("\\.todo$" . todo-list-mode) auto-mode-alist))
+
+;; Emacs macro to sort the todo list
+(fset 'sort-todo
+      [?\M-< ?\C-  ?\M-> ?\M-x ?s ?o ?r ?t ?- ?l ?i ?n ?e ?s return ?\M-<])
+
+;; Build tags automatically
+(setq rinari-tags-file-name "TAGS")
+
+;; Unbind arrow keys to learn the emacs movement keys better
+(global-set-key [up] nil)
+(global-set-key [down] nil)
+(global-set-key [left] nil)
+(global-set-key [right] nil)
+
+(global-set-key [(control z)] nil)
