@@ -53,6 +53,7 @@
 ;; Tab completion
 ;; http://www.emacsblog.org/2007/03/12/tab-completion-everywhere/
 (require 'smart-tab)
+(setq smart-tab-using-hippie-expand 1)
 (global-set-key [(tab)] 'smart-tab)
 
 ;; rhtml-mode (because MuMaMo-mode locks up every other day on large
