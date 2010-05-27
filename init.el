@@ -218,6 +218,7 @@
 (add-to-list 'auto-mode-alist '("\\.ya?ml$" . yaml-mode))
 (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("Rakefile$" . ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.rjs$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.js\\(on\\)?$" . js2-mode))
 (add-to-list 'auto-mode-alist '("\\.xml$" . nxml-mode))
 
@@ -316,6 +317,7 @@ exec-to-string command, but it works and seems fast"
 
 (add-hook 'ruby-mode-hook 'run-coding-hook)
 (add-hook 'ruby-mode-hook 'idle-highlight)
+(add-hook 'ruby-mode-hook 'turn-on-font-lock)
 
 (eval-after-load 'ruby-mode
   '(progn
@@ -355,6 +357,8 @@ exec-to-string command, but it works and seems fast"
 (setq rinari-major-modes
       (list 'dired-mode-hook 'ruby-mode-hook
 	    'css-mode-hook 'yaml-mode-hook 'javascript-mode-hook))
+
+(require 'yaml-mode)
 
 ; Javascript
 (autoload 'espresso-mode "espresso" "Start espresso-mode" t)
