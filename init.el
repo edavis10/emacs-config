@@ -243,6 +243,12 @@
 ;; make emacs use the clipboard
 (setq x-select-enable-clipboard t)
 
+(require 'markdown-mode)
+
+(require 'font-lock)
+
+(global-font-lock-mode 1)
+
 
 ; Lisp
 (define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)
