@@ -222,6 +222,8 @@
 (add-to-list 'auto-mode-alist '("\\.js\\(on\\)?$" . js2-mode))
 (add-to-list 'auto-mode-alist '("\\.xml$" . nxml-mode))
 
+(add-to-list 'auto-mode-alist '("\\.erb$" . rhtml-mode))
+
 ;; Default to unified diffs
 (setq diff-switches "-u")
 
