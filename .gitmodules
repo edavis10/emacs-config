@@ -1,0 +1,3 @@
+[submodule "elpa-to-submit/yasnippets-rails"]
+	path = elpa-to-submit/yasnippets-rails
+	url = git@github.com:edavis10/yasnippets-rails.git
