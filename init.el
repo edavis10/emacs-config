@@ -196,6 +196,8 @@
         ido-use-filename-at-point 'guess
         ido-max-prospects 10))
 
+(setq ido-max-directory-size 100000)
+
 (set-default 'indent-tabs-mode nil)
 (set-default 'indicate-empty-lines t)
 (set-default 'imenu-auto-rescan t)
@@ -215,6 +217,7 @@
 ;; Associate modes with file extensions
 (add-to-list 'auto-mode-alist '("COMMIT_EDITMSG$" . diff-mode))
 (add-to-list 'auto-mode-alist '("\\.css$" . css-mode))
+(add-to-list 'auto-mode-alist '("\\.scss$" . css-mode))
 (add-to-list 'auto-mode-alist '("\\.ya?ml$" . yaml-mode))
 (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("Rakefile$" . ruby-mode))
@@ -312,6 +315,21 @@ exec-to-string command, but it works and seems fast"
                                       (pcmpl-rake-tasks))))
   (shell-command-to-string (concat "rake " (if (= 0 (length task)) "default" task))))
 
+(defun chiliproject-test-setup ()
+  (interactive)
+  (rinari-rake "local:test:setup"))
+
+
+(defun rails-parallel-tests ()
+  (interactive)
+  (rinari-rake "parallel:test"))
+
+(defun rinari-custom-key-bindings ()
+  (define-key rinari-minor-mode-map (kbd "C-c ; P") 'chiliproject-test-setup)
+  (define-key rinari-minor-mode-map (kbd "C-c ; p") 'rails-parallel-tests))
+
+;; could also try using eval-after-load
+(add-hook 'rinari-minor-mode-hook 'rinari-custom-key-bindings)
 
 ;; Clear the compilation buffer between test runs.
 (eval-after-load 'ruby-compilation

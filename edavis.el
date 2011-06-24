@@ -10,6 +10,9 @@
 ; Search tags
 (global-set-key [(control tab)] 'find-tag)
 
+; Map C-Enter to do the standard Enter (with reindents). Used for lazy holding Ctrl Eric Davis
+(global-set-key [(control return)] 'reindent-then-newline-and-indent)
+
 ; Indent with spaces
 (setq-default indent-tabs-mode nil)
 
@@ -75,6 +78,17 @@
 (fset 'sort-todo
       [?\M-< ?\C-  ?\M-> ?\M-x ?s ?o ?r ?t ?- ?l ?i ?n ?e ?s return ?\M-<])
 
+;; Emacs macro to add a pomodoro item
+(fset 'pomodoro
+   "[ ]")
+
+;; Emacs macro to add a pomodoro table
+;;
+;; | G | Organization | [ ] |
+;; |   |              |     |
+(fset 'pomodoro-table
+   [?| ?  ?G ?  ?| ?  ?O ?r ?g ?a ?n ?i ?z ?a ?t ?i ?o ?n ?  ?| ?  ?\[ ?  ?\] ?  ?| tab])
+
 ;; Build tags automatically
 (setq rinari-tags-file-name "TAGS")
 
@@ -100,3 +114,74 @@
         try-complete-lisp-symbol-partially
         try-complete-lisp-symbol))
 
+(load-file "~/.emacs.d/elpa-to-submit/yasnippets-rails/setup.el")
+(setq yas/root-directory "~/.emacs.d/snippets")
+
+;; Load the snippets
+(yas/load-directory yas/root-directory)
+
+;; asciidoc
+
+(autoload 'doc-mode "doc-mode" nil t)
+(add-to-list 'auto-mode-alist '("\\.adoc$" . doc-mode))
+(add-hook 'doc-mode-hook
+          '(lambda ()
+             (require 'asciidoc)))
+
+;; Macro to clear the buffer and enter a merge commit like:
+;;
+;;  "Merged r[] from trunk."  where the point is at []
+(fset 'merge-commit
+   [escape ?< ?\C-  ?\M-> ?\C-w ?M ?e ?r ?g ?e ?d ?  ?r ?  ?f ?r ?o ?m ?  ?t ?r ?u ?n ?k ?. ?\M-b ?\M-b ?\M-b ?\C-f])
+
+;; Some writing helpers
+
+;;; http://www.emacswiki.org/emacs/WordCount
+(defun wc (&optional start end)
+  "Prints number of lines, words and characters in region or whole buffer."
+  (interactive)
+  (let ((n 0)
+        (start (if mark-active (region-beginning) (point-min)))
+        (end (if mark-active (region-end) (point-max))))
+    (save-excursion
+      (goto-char start)
+      (while (< (point) end) (if (forward-word 1) (setq n (1+ n)))))
+    (message "%3d Lines - %3d Words - %3d Characters" (count-lines start end) n (- end start))))
+
+(defalias 'word-count 'wc)
+(defalias 'count-words 'wc)
+
+
+(defun word-count-analysis (start end)
+  "Count how many times each word is used in the region. Punctuation is ignored."
+  (interactive "r")
+  (let (words)
+    (save-excursion
+      (goto-char start)
+      (while (re-search-forward "\\w+" end t)
+        (let* ((word (intern (match-string 0)))
+               (cell (assq word words)))
+          (if cell
+              (setcdr cell (1+ (cdr cell)))
+            (setq words (cons (cons word 1) words))))))
+    (when (interactive-p)
+      (message "%S" words))
+    words))
+
+
+;; orgmode is turning on word wrap by default
+
+(add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
+
+;; Open a buffer in multiple frames
+(setq ido-default-buffer-method 'selected-window)
+
+;; MobileOrg
+;; Set to the location of your Org files on your local system
+(setq org-directory "~/doc/N/Notes")
+;; Set to the name of the file where new notes will be stored
+(setq org-mobile-inbox-for-pull "~/doc/N/Notes/incoming.org")
+;; Set to <your Dropbox root directory>/MobileOrg.
+(setq org-mobile-directory "~/Dropbox/MobileOrg")
+(setq org-mobile-files (quote ("~/doc/N/Notes/web-business-system.org"
+                               "~/doc/N/Notes/Kindle/accidental_genius.org")))
