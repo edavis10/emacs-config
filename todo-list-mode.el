@@ -55,6 +55,7 @@
 (setq todo-list-highlight-regexps '(
    ;;regexp keyword matches:
    ;;beg line|number|letter?|tab|any char|any chars|end line
+   ("^\#[a-z]? .*$" 0 todo-list-comment-face t)
    ("^0[a-z]? .*$" 0 todo-list-zero-face t)
    ("^1[a-z]? .*$" 0 todo-list-one-face t)
    ("^2[a-z]? .*$" 0 todo-list-two-face t)
@@ -64,7 +65,7 @@
    ("^D[a-z]? .*$" 0 todo-list-dream-face t)
    ("^L[a-z]? .*$" 0 todo-list-life-face t)
    ("^X .*$"0	todo-list-complete-face t)
-   ("#.*$" 0 font-lock-comment-face t)
+;;   ("#.*$" 0 font-lock-comment-face t)
    ("#[\-_A-Za-z0-9]+" 0 todo-list-hashtag-face t)
 ))
 
@@ -78,6 +79,15 @@
 ;;
 ;;define custom faces for todo-list mode
 ;;
+(defface todo-list-comment-face'(
+  (((class color) (background dark))	(:foreground "#00ff00" :bold t))
+  (((class color) (background light))	(:foreground "#00ff00" :bold t))
+  (t (:bold t :italic t)))
+  "Todo-List mode face used for comments (#)."
+  :group 'todo-list-mode-highlighting-faces)
+(defvar todo-list-comment-face 'todo-list-comment-face
+  "Todo-List mode face used for comments (#).")
+
 (defface todo-list-zero-face'(
   (((class color) (background dark)) (:foreground "dark grey" :slant italic))
   (((class color) (background light)) (:foreground "black" :slant italic))
