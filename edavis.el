@@ -1,5 +1,5 @@
 ; Colors
-; http://www.cs.cmu.edu/~maverick/GNUEmacsColorThemeTest/
+; http://www.cs.cmu.edu/~maverick/GNUEmacsColorTheme
 (require 'color-theme)
 (load-file "~/.emacs.d/themes/color-theme-lss.el")
 (color-theme-lss)
