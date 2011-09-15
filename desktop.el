@@ -3,13 +3,13 @@
 ;; Finish editing on a client
 (global-set-key (kbd "C-c x") 'server-edit)
 
-(add-hook 'server-switch-hook
-          (lambda nil
-            (let ((server-buf (current-buffer)))
-              (bury-buffer)
-              (switch-to-buffer-other-frame server-buf))))
+;; (add-hook 'server-switch-hook
+;;           (lambda nil
+;;             (let ((server-buf (current-buffer)))
+;;               (bury-buffer)
+;;               (switch-to-buffer-other-frame server-buf))))
 
-(add-hook 'server-done-hook 'delete-frame)
+;; (add-hook 'server-done-hook 'delete-frame)
 
 ;; Remove the server socket when emacs exits.  Had to shell out because
 ;; delete-file was returning "/tmp/emacs1000/server: No such device or address"
